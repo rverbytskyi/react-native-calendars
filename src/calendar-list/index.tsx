@@ -86,6 +86,7 @@ const CalendarList = (props: CalendarListProps & ContextProp, ref: any) => {
     onLayout,
     removeClippedSubviews,
     /** ScrollView props */
+    contentContainerStyle,
     horizontal = false,
     pagingEnabled,
     scrollEnabled = true,
@@ -213,16 +214,6 @@ const CalendarList = (props: CalendarListProps & ContextProp, ref: any) => {
     };
   }, []);
 
-  const isDateInRange = useCallback((date) => {
-    for(let i = -range.current; i <= range.current; i++) {
-      const newMonth = currentMonth?.clone().addMonths(i, true);
-      if (sameMonth(date, newMonth)) {
-        return true;
-      }
-    }
-    return false;
-  }, [currentMonth]);
-
   const renderItem = useCallback(({item}: {item: XDate}) => {
     const dateString = toMarkingFormat(item);
     const [year, month] = dateString.split('-');
@@ -239,10 +230,9 @@ const CalendarList = (props: CalendarListProps & ContextProp, ref: any) => {
         calendarWidth={calendarWidth}
         calendarHeight={calendarHeight}
         scrollToMonth={scrollToMonth}
-        visible={isDateInRange(item)}
       />
     );
-  }, [horizontal, calendarStyle, calendarWidth, testID, getMarkedDatesForItem, isDateInRange, calendarProps]);
+  }, [horizontal, calendarStyle, calendarWidth, testID, getMarkedDatesForItem, calendarProps]);
 
   const renderStaticHeader = () => {
     if (staticHeader && horizontal) {
@@ -287,6 +277,7 @@ const CalendarList = (props: CalendarListProps & ContextProp, ref: any) => {
         // @ts-expect-error
         ref={list}
         style={listStyle}
+        contentContainerStyle={contentContainerStyle}
         showsVerticalScrollIndicator={showScrollIndicator}
         showsHorizontalScrollIndicator={showScrollIndicator}
         data={items}

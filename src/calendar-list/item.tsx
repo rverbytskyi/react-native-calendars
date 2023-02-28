@@ -1,6 +1,5 @@
 import XDate from 'xdate';
 import React, {useRef, useMemo, useCallback} from 'react';
-import {Text} from 'react-native';
 import {Theme} from '../types';
 import {toMarkingFormat} from '../interface';
 import {extractCalendarProps} from '../componentUpdater';
@@ -14,10 +13,9 @@ export type CalendarListItemProps = CalendarProps & {
   horizontal?: boolean;
   theme?: Theme;
   scrollToMonth?: (date: XDate) => void;
-  visible?: boolean;
 };
 
-const CalendarListItem = React.memo((props: CalendarListItemProps) => {  
+const CalendarListItem = React.memo((props: CalendarListItemProps) => {
   const {
     item,
     theme,
@@ -29,29 +27,24 @@ const CalendarListItem = React.memo((props: CalendarListItemProps) => {
     headerStyle,
     onPressArrowLeft,
     onPressArrowRight,
-    visible
   } = props;
 
   const style = useRef(styleConstructor(theme));
-  
+
   const calendarProps = extractCalendarProps(props);
   const dateString = toMarkingFormat(item);
-  
+
   const calendarStyle = useMemo(() => {
     return [
       {
         width: calendarWidth,
         minHeight: calendarHeight
-      }, 
+      },
       style.current.calendar,
       propsStyle
     ];
   }, [calendarWidth, calendarHeight, propsStyle]);
-  
-  const textStyle = useMemo(() => {
-    return [calendarStyle, style.current.placeholderText];
-  }, [calendarStyle]);
-  
+
   const _onPressArrowLeft = useCallback((method: () => void, month?: XDate) => {
     const monthClone = month?.clone();
     if (monthClone) {
@@ -80,12 +73,6 @@ const CalendarListItem = React.memo((props: CalendarListItemProps) => {
       }
     }
   }, [onPressArrowRight, scrollToMonth]);
-
-  if (!visible) {
-    return (
-      <Text style={textStyle}>{dateString}</Text>
-    );
-  }
 
   return (
     <Calendar
